@@ -1,0 +1,81 @@
+<html>
+
+<style>
+    body{
+        background-color: gray;
+        padding: 0px;
+    }
+    #body-head{
+        width: 100%;
+        height: 20px;
+    }
+    #body-body{
+        width: 100%;
+        height: calc(100% - 20px);
+    }
+    #body{
+        position: absolute;
+        top: 2px;
+        left: 154px;
+        background-color: white;
+        color: black;
+        border-width: 0;
+        height: calc(100% - 4px);
+        width: calc(100% - 158px);
+    }
+    iframe{
+        border-width: 0;
+
+        height: calc(100%);
+        width: calc(100%);
+    }
+    #group-list{
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 130px;
+        bottom: 0px;
+        color: white;
+        background-color: black;
+        padding-left: 20px;
+    }
+
+</style>
+
+<style name="side">
+    .node-body{
+        padding-left: 10px;
+    }
+    .node-head{
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <div id="group-list">
+        <button onclick="createGroup()">添加</button>
+    </div>
+
+    <div id="body">
+        <div id="body-head">
+        </div>
+        <iframe id="body-body">
+        </iframe>
+    </div>
+</body>
+<script type="text/javascript" src="/js/QEnhance.js"></script>
+<script type="text/javascript" src="/js/list.js"></script>
+<script type="text/javascript" src="/js/QtHistory.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+<script>
+    function newEmptyCollection() {
+        return{
+            name:"",
+            code:"",
+            projectCode:"",
+        };
+    }
+
+
+</script>
+</html>

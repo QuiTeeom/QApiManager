@@ -1,0 +1,147 @@
+<style>
+    body{
+        padding: 0px;
+        margin: 0px;
+    }
+    #api-box{
+        position: absolute;
+        top: 10px;
+        left: 5px;
+        width: 150px;
+        border-right: solid 1px black;
+    }
+    #api-detail{
+        position: absolute;
+        top: 10px;
+        left: 160px;
+        right: 2px;
+    }
+</style>
+
+
+<body>
+    <div id="api-box">
+        <button onclick="create()">新增</button>
+        <button>删除</button>
+
+    </div>
+    <div id="api-detail">
+        <form id="api-form">
+            <div>
+                <label>
+                    API 编号
+                </label>
+                <input id="api-code" type="text">
+            </div>
+            <div>
+                <label>
+                    API 名称
+                </label>
+                <input id="api-name" data-modify type="text">
+            </div>
+            <div>
+                <label>
+                    API 路径
+                </label>
+                <input id="api-path" data-modify type="text">
+            </div>
+            <div>
+                <label>
+                    API 方法
+                </label>
+                <select id="api-method" data-modify>
+                    <option value="get">GET</option>
+                    <option value="post">POST</option>
+                    <option value="put">PUT</option>
+                    <option value="delete">DELETE</option>
+                </select>
+            </div>
+        </form>
+        <button onclick="save()">保存</button>
+    </div>
+</body>
+<script type="text/javascript" src="../../js/QEnhance.js"></script>
+<script type="text/javascript" src="../../js/list.js"></script>
+<script>
+    let collection =  window.parent.history.QData
+
+    let apiList = NewList({
+        id:"api-box",
+       text:"name"
+    });
+    create()
+    load()
+    function load(){
+
+        fetch("/apis?collectionCode="+collection.code).then(function (res) {
+            return res.json()
+        }).then(function (res) {
+            console.log(res.data);
+            apiList.setData(res.data)
+
+        });
+    }
+
+    apiList.onClick = function (data) {
+        console.log(data);
+        fillForm(data,true)
+    }
+    
+    function create() {
+        fillForm(newEmptyApi(),false)
+    }
+
+    function fillForm(data,modify) {
+        Q("#api-form").QData("modify",modify)
+        Object.keys(data).forEach(function (key) {
+            p = Q("#api-"+key);
+            if (p){
+                if (modify&&p.QData("modify")!=null){
+                    p.disabled = false
+                }else if (modify&&p.QData("modify")==null){
+                    p.disabled = true
+                }else {
+                    p.disabled = false
+                }
+                p.value = data[key]
+            }
+        })
+    }
+
+    function save() {
+        let form = newEmptyApi();
+
+        Object.keys(form).forEach(function (key) {
+            p = Q("#api-"+key);
+            if (p){
+                form[key] = p.value
+            }
+        })
+
+
+        fetch("/apis",{
+            method:Q("#api-form").QData("modify")==='true'?"put":"post",
+            body:JSON.stringify(form)
+        }).then(function (res) {
+            return res.json()
+        }).then(function (res) {
+            if (res.success){
+                load();
+                create();
+            } else {
+                alert(res.message)
+            }
+        })
+    }
+
+    function newEmptyApi() {
+        return{
+            code:"",
+            name:"",
+            path:"",
+            method:"get",
+            collectionCode:collection.code
+        };
+    }
+
+</script>
