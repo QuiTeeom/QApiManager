@@ -34,19 +34,28 @@ function NewList(custom) {
         onclick:function (event) {
             let node = event.target.QParent();
             let keys = node.QData("key").split('.');
-            let cf = this.config.children;
-            let data = {}
-            data[cf] = this.data;
-            for(let i = 1;i<keys.length;i++){
-                data = data[cf][keys[i]]
-            }
-            this.onClick(data)
+            this.select(keys.slice(1))
         },
         onClick:function (data) {},
         setData(data) {
             this.data = data;
             Q(".q-list-body",this.dom).innerHTML = "";
             addChildren(data,Q(".q-list-body",this.dom),null,this.config,this)
+        },
+        select:function (id) {
+            let cf = this.config.children;
+            let data = {};
+            data[cf] = this.data;
+            for(let i = 0;i<id.length;i++){
+                data = data[cf][id[i]]
+            }
+            let listBody = Q(".q-list-body",this.dom);
+            let selectedDom = Q(".selected",listBody);
+            if (selectedDom != null)
+                selectedDom.QRemoveClass("selected");
+            let dom = Q('[data-key=".'+id.join(".")+'"]',listBody);
+            dom.QAddClass("selected");
+            this.onClick(data)
         }
     }
 }

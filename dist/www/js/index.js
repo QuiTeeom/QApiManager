@@ -1,33 +1,32 @@
-let collectionList = NewList({
-    id:"group-list",
-    text:"name",
-    children: "children"
-});
-collectionList.setData([
-        {
-            name: 'API管理',
-            code: "api",
-        },
-        {
-            name: '用户管理',
-            code: "user",
-        }
- ]);
+let paths = location.pathname.split("/");
 
-collectionList.onClick = function (data) {
-    console.log(data);
-    history.pushState(data, data.name, data.page)
+let projectInfo = {
+    projectCode: "unknown",
+    module: "unknown",
 };
+if (paths.length==3){
+    projectInfo = {
+        projectCode:paths[1],
+        module:paths[2]
+    }
+}
 
 history.QOnChange = function () {
     console.log(history);
-    let body_body = Q("#body-body");
+    let project_body = Q("#project-body");
     let data = history.QData;
-    body_body.setAttribute("src", "/modules/api/index.html");
-    Q("#body-head").innerHTML = data.name
+    project_body.setAttribute("src", "/modules/" + data.module + "/index.html");
 };
 
-history.QInit(collectionList.data[0]);
-function createGroup() {
-    
-}
+Q("a").forEach(function (a) {
+    // a.setAttribute("href","/"+paths[1]+a.getAttribute("href"))
+    a.addEventListener("click",function (e) {
+        e.preventDefault()
+        history.pushState({
+            projectCode:projectInfo.projectCode,
+            module:a.QData("module")
+        },null,"/"+projectInfo.projectCode+"/"+a.QData("module"))
+    })
+});
+
+history.QInit(projectInfo);

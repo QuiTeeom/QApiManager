@@ -10,6 +10,7 @@ import (
 func CreateHandler(mux *http.ServeMux) {
 	addController(mux, NewUserController())
 	addController(mux, NewApiController())
+	addController(mux, NewApiCollectionController())
 }
 
 func addController(mux *http.ServeMux, controller HttpController) {
@@ -143,6 +144,41 @@ func NewApiController() HttpController {
 						var apis []Api
 						db.Where("collection_code='" + collectionCode + "'").Find(&apis)
 						cxt.returnObj(apis)
+					},
+				},
+			},
+		},
+	}
+}
+
+func NewApiCollectionController() HttpController {
+	return HttpController{
+		path: "/api-collections",
+		methods: []HttpControllerMethod{
+			{
+				path: "",
+				methodMap: map[string]func(*QtRequestContext){
+					"post": func(cxt *QtRequestContext) {
+						collection := ApiCollection{}
+						cxt.getJson(&collection)
+
+						var count int
+						db.Table("api_collections").Where("code = '" + collection.Code + "'").Count(&count)
+						if count > 0 {
+							panic("code 已经存在")
+						}
+						db.Create(collection)
+					},
+					"put": func(cxt *QtRequestContext) {
+						collection := ApiCollection{}
+						cxt.getJson(&collection)
+						db.Table("api_collections").Where("code = '" + collection.Code + "'").Update(&collection)
+					},
+					"get": func(cxt *QtRequestContext) {
+						projectCode := cxt.Request.FormValue("projectCode")
+						var collections []ApiCollection
+						db.Where("project_code='" + projectCode + "'").Find(&collections)
+						cxt.returnObj(collections)
 					},
 				},
 			},

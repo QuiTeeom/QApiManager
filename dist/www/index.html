@@ -1,19 +1,22 @@
 <html>
 
 <style>
-    body{
+    body {
         background-color: gray;
         padding: 0px;
     }
-    #body-head{
+
+    #body-head {
         width: 100%;
         height: 20px;
     }
-    #body-body{
+
+    #body-body {
         width: 100%;
         height: calc(100% - 20px);
     }
-    #body{
+
+    #body {
         position: absolute;
         top: 2px;
         left: 154px;
@@ -23,13 +26,15 @@
         height: calc(100% - 4px);
         width: calc(100% - 158px);
     }
-    iframe{
+
+    iframe {
         border-width: 0;
 
         height: calc(100%);
         width: calc(100%);
     }
-    #group-list{
+
+    #group-list {
         position: absolute;
         top: 0px;
         left: 0px;
@@ -43,15 +48,72 @@
 </style>
 
 <style name="side">
-    .node-body{
+    .node-body {
         padding-left: 10px;
     }
-    .node-head{
+
+    .node-head {
         cursor: pointer;
     }
 </style>
 
+<style>
+    #project-bar{
+        background-color: black;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        height: 30px;
+        color: white;
+        line-height: 29px;
+    }
+    #project-body{
+        background-color: white;
+        position: absolute;
+        top: 32px;
+        left: 0px;
+        width: 100%;
+        height: calc(100% - 32px);
+    }
+    #project-bar-header{
+        display: inline-block;
+        padding-left: 10px;
+        height: 100%;
+    }
+    #project-bar-body{
+        display: inline-block;
+        padding-left: 10px;
+        height: 100%;
+    }
+    #project-bar-body a{
+        color: gray;
+    }
+</style>
 <body>
+<div id="project-bar">
+    <div id="project-bar-header">
+        <div id="project-name">
+            API管理工具
+        </div>
+    </div>
+    <div id="project-bar-body">
+        <a data-module="api">
+            接口
+        </a>
+        <a data-module="member">
+            成员
+        </a>
+        <a data-module="client">
+            客户端
+        </a>
+        <a data-module="mock-server">
+            Mock
+        </a>
+    </div>
+</div>
+
+<iframe id="project-body">
     <div id="group-list">
         <button onclick="createGroup()">添加</button>
     </div>
@@ -62,20 +124,9 @@
         <iframe id="body-body">
         </iframe>
     </div>
+</iframe>
 </body>
 <script type="text/javascript" src="/js/QEnhance.js"></script>
-<script type="text/javascript" src="/js/list.js"></script>
 <script type="text/javascript" src="/js/QtHistory.js"></script>
 <script type="text/javascript" src="/js/index.js"></script>
-<script>
-    function newEmptyCollection() {
-        return{
-            name:"",
-            code:"",
-            projectCode:"",
-        };
-    }
-
-
-</script>
 </html>
